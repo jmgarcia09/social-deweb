@@ -14,6 +14,12 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ThemeModule } from './@theme/theme.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFireModule} from "angularfire2";
+import { AngularFireAuthModule} from "angularfire2/auth";
+import {AngularFireDatabaseModule} from "angularfire2/database";
+import { environment} from "../environments/environment";
+import {NbAuthModule} from "./auth/auth.module";
+import {NbDummyAuthStrategy} from "./auth/strategies";
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +32,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    NbAuthModule.forRoot({
+      strategies: [
+        NbDummyAuthStrategy.setup({
+          name: 'email',
+        }),
+      ],
+      forms: {},
+    })
   ],
   bootstrap: [AppComponent],
   providers: [
