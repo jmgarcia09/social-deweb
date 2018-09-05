@@ -10,6 +10,7 @@ import { getDeepFromObject } from '../../helpers';
 
 import { NbAuthService } from '../../services/auth.service';
 import { NbAuthResult } from '../../services/auth-result';
+import {AngularFireAuth} from "angularfire2/auth";
 
 
 @Component({
@@ -22,6 +23,7 @@ export class NbRegisterComponent {
 
   redirectDelay: number = 0;
   showMessages: any = {};
+
   strategy: string = '';
 
   submitted = false;
@@ -33,7 +35,8 @@ export class NbRegisterComponent {
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
-              protected router: Router) {
+              protected router: Router,
+              public  firebaseRegister : AngularFireAuth) {
 
     this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
     this.showMessages = this.getConfigValue('forms.register.showMessages');
@@ -44,22 +47,20 @@ export class NbRegisterComponent {
   register(): void {
     this.errors = this.messages = [];
     this.submitted = true;
-
-    this.service.register(this.strategy, this.user).subscribe((result: NbAuthResult) => {
-      this.submitted = false;
-      if (result.isSuccess()) {
-        this.messages = result.getMessages();
+    
+    this.firebaseRegister.auth.createUserWithEmailAndPassword(this.user.email, this.user.password)
+    .then((success) => {
+      alert(`Usuario registrado`);
+      this.router.navigateByUrl('../login');
+    }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode == 'auth/weak-password') {
+        alert('The password is too weak.');
       } else {
-        this.errors = result.getErrors();
+        alert(errorMessage);
       }
-
-      const redirect = result.getRedirect();
-      if (redirect) {
-        setTimeout(() => {
-          return this.router.navigateByUrl(redirect);
-        }, this.redirectDelay);
-      }
-      this.cd.detectChanges();
+      console.log(error);
     });
   }
 
