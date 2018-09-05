@@ -11,6 +11,7 @@ import { getDeepFromObject } from '../../helpers';
 import { NbAuthService } from '../../services/auth.service';
 import { NbAuthResult } from '../../services/auth-result';
 import {AngularFireAuth} from "angularfire2/auth";
+import {AngularFirestore} from "angularfire2/firestore";
 
 
 @Component({
@@ -36,7 +37,8 @@ export class NbRegisterComponent {
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
               protected router: Router,
-              public  firebaseRegister : AngularFireAuth) {
+              protected  firebaseRegister : AngularFireAuth,
+              protected firebaseDatabase : AngularFirestore) {
 
     this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
     this.showMessages = this.getConfigValue('forms.register.showMessages');
@@ -47,11 +49,21 @@ export class NbRegisterComponent {
   register(): void {
     this.errors = this.messages = [];
     this.submitted = true;
-    
+
     this.firebaseRegister.auth.createUserWithEmailAndPassword(this.user.email, this.user.password)
-    .then((success) => {
-      alert(`Usuario registrado`);
-      this.router.navigateByUrl('../login');
+    .then((successResponse) => {
+      console.log(successResponse);
+      this.firebaseDatabase.collection('users').doc(successResponse.user.uid).set({
+        name : this.user.fullName,
+        email : successResponse.user.email,
+        uid : successResponse.user.uid
+      }).then(createSuccess =>{
+        alert(`Usuario registrado`);
+        this.router.navigate(['/auth/login']);
+      }).catch(createError =>{
+        console.log("No se pudo crear usuario");
+      })
+
     }).catch(function(error) {
       var errorCode = error.code;
       var errorMessage = error.message;

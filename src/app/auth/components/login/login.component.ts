@@ -3,22 +3,22 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { NB_AUTH_OPTIONS, NbAuthSocialLink } from '../../auth.options';
 import { getDeepFromObject } from '../../helpers';
 
 import { NbAuthService } from '../../services/auth.service';
-import { NbAuthResult } from '../../services/auth-result';
 import {AngularFireAuth} from "angularfire2/auth";
-import {isSuccess} from "@angular/http/src/http_utils";
+import {AngularFirestore} from "angularfire2/firestore";
+import {SocialUser} from "../../../bean/social-user";
 
 @Component({
   selector: 'nb-login',
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NbLoginComponent {
+export class NbLoginComponent implements OnInit{
 
   redirectDelay: number = 0;
   showMessages: any = { error : false};
@@ -35,7 +35,8 @@ export class NbLoginComponent {
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
               protected router: Router,
-              protected  firebaseAuth : AngularFireAuth) {
+              protected  firebaseAuth : AngularFireAuth,
+              protected  firebaseDatabase : AngularFirestore) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
@@ -48,22 +49,30 @@ export class NbLoginComponent {
   login(): void {
     this.errorMessages = this.messages = [];
     this.submitted = true;
-
     this.firebaseAuth.auth.signInWithEmailAndPassword(this.user.email,this.user.password).then(
-      isSuccess => {
-        console.log("si se conecto PUTO!.");
-        console.log(isSuccess);
-        this.submitted = false;
-        this.router.navigateByUrl("../pages");
+      (successResponse : any) => {
+
+        this.messages.push("Autenticacion correcta!.");
+
+        console.log(successResponse);
+        console.log("connection success");
+        let userPath = 'users/' + successResponse.user.uid;
+        console.log(userPath);
+        this.firebaseDatabase.doc(userPath).valueChanges().subscribe(data =>{
+        //this.firebaseDatabase.collection('users', ref => ref.where('email','==',successResponse.user.email).limit(1)).valueChanges().subscribe(data =>{
+          this.submitted = false;
+          console.log(data);
+          this.router.navigate(['/pages/dashboard']);
+        });
 
       },
       error =>{
-        console.log(error);
+        console.log(error.code);
         this.errorMessages = [this.getErrorMessage(error.code)];
-        console.log("Fallo puto");
         this.submitted = false;
-        this.cd.detectChanges();
+
       });
+    this.cd.detectChanges();
   }
 
   getConfigValue(key: string): any {
@@ -82,4 +91,14 @@ export class NbLoginComponent {
       return "Error inesperado.";
     }
   }
+
+  ngOnInit(){
+    if(this.firebaseAuth.auth.currentUser){
+      this.router.navigate(['/pages/dashboard']);
+    }else {
+      console.log("No user Authenticated");
+    }
+
+  }
+
 }

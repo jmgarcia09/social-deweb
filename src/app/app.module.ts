@@ -20,6 +20,7 @@ import {AngularFireDatabaseModule} from "angularfire2/database";
 import { environment} from "../environments/environment";
 import {NbAuthModule} from "./auth/auth.module";
 import {NbDummyAuthStrategy} from "./auth/strategies";
+import {AngularFirestoreModule} from "angularfire2/firestore";
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +36,7 @@ import {NbDummyAuthStrategy} from "./auth/strategies";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFirestoreModule,
     NbAuthModule.forRoot({
       strategies: [
         NbDummyAuthStrategy.setup({
