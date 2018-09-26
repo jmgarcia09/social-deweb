@@ -2,12 +2,12 @@
   <h2 class="title">Sign Up</h2>
   <form (ngSubmit)="register()" #form="ngForm">
 
-    <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger">
+    <nb-alert *ngIf=" errors?.length && !submitted" outline="danger">
       <div><strong>Oh snap!</strong></div>
       <div *ngFor="let error of errors">{{ error }}</div>
     </nb-alert>
 
-    <nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success">
+    <nb-alert *ngIf="messages?.length && !submitted" outline="success">
       <div><strong>Hooray!</strong></div>
       <div *ngFor="let message of messages">{{ message }}</div>
     </nb-alert>
@@ -88,17 +88,40 @@
     </div>
 
     <div class="form-group">
-      <label for="input-re-password" class="sr-only">Repeat password</label>
+    <label for="input-re-password" class="sr-only">Repeat password</label>
+    <input nbInput
+           [(ngModel)]="user.confirmPassword"
+           #rePass="ngModel"
+           type="password"
+           id="input-re-password"
+           name="rePass"
+           placeholder="Confirm Password"
+           fullWidth
+           [status]="email.dirty ? (email.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''"
+           [required]="getConfigValue('forms.validation.password.required')">
+    <small class="form-text error"
+           *ngIf="rePass.invalid && rePass.touched && rePass.errors?.required">
+      Password confirmation is required!
+    </small>
+    <small
+      class="form-text error"
+      *ngIf="rePass.touched && password.value != rePass.value && !rePass.errors?.required">
+      Password does not match the confirm password.
+    </small>
+    </div>
+
+    <div class="form-group">
+      <label for="avatar" class="sr-only">Avatar</label>
       <input nbInput
-             [(ngModel)]="user.confirmPassword"
-             #rePass="ngModel"
-             type="password"
-             id="input-re-password"
-             name="rePass"
-             placeholder="Confirm Password"
+             [(ngModel)]="user.image"
+             #avatar="ngModel"
+             type="file"
+             id="avatar"
+             name="avatar"
+             placeholder="Upload image"
              fullWidth
-             [status]="email.dirty ? (email.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''"
-             [required]="getConfigValue('forms.validation.password.required')">
+             (change)="updateAvatar($event)"
+             >
       <small class="form-text error"
              *ngIf="rePass.invalid && rePass.touched && rePass.errors?.required">
         Password confirmation is required!
@@ -109,6 +132,7 @@
         Password does not match the confirm password.
       </small>
     </div>
+
 
     <div class="form-group accept-group col-sm-12" *ngIf="getConfigValue('forms.register.terms')">
       <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">

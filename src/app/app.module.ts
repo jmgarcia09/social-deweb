@@ -21,6 +21,7 @@ import { environment} from "../environments/environment";
 import {NbAuthModule} from "./auth/auth.module";
 import {NbDummyAuthStrategy} from "./auth/strategies";
 import {AngularFirestoreModule} from "angularfire2/firestore";
+import {AngularFireStorageModule} from "angularfire2/storage";
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import {AngularFirestoreModule} from "angularfire2/firestore";
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
+    AngularFireStorageModule,
     NbAuthModule.forRoot({
       strategies: [
         NbDummyAuthStrategy.setup({

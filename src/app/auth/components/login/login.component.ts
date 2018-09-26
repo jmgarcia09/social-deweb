@@ -12,6 +12,7 @@ import { NbAuthService } from '../../services/auth.service';
 import {AngularFireAuth} from "angularfire2/auth";
 import {AngularFirestore} from "angularfire2/firestore";
 import {SocialUser} from "../../../bean/social-user";
+import {FirebaseAuthService} from "../../../services/firebase/auth/firebase-auth.service";
 
 @Component({
   selector: 'nb-login',
@@ -36,32 +37,29 @@ export class NbLoginComponent implements OnInit{
               protected cd: ChangeDetectorRef,
               protected router: Router,
               protected  firebaseAuth : AngularFireAuth,
-              protected  firebaseDatabase : AngularFirestore) {
+              protected  firebaseDatabase : AngularFirestore,
+              protected  firebaseAuthService : FirebaseAuthService) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
     this.strategy = this.getConfigValue('forms.login.strategy');
     this.socialLinks = this.getConfigValue('forms.login.socialLinks');
     this.rememberMe = this.getConfigValue('forms.login.rememberMe');
-    console.log(this.showMessages);
   }
 
   login(): void {
     this.errorMessages = this.messages = [];
     this.submitted = true;
-    this.firebaseAuth.auth.signInWithEmailAndPassword(this.user.email,this.user.password).then(
+    this.firebaseAuthService.login(this.user.email,this.user.password).then(
       (successResponse : any) => {
 
         this.messages.push("Autenticacion correcta!.");
 
-        console.log(successResponse);
-        console.log("connection success");
         let userPath = 'users/' + successResponse.user.uid;
-        console.log(userPath);
         this.firebaseDatabase.doc(userPath).valueChanges().subscribe(data =>{
         //this.firebaseDatabase.collection('users', ref => ref.where('email','==',successResponse.user.email).limit(1)).valueChanges().subscribe(data =>{
           this.submitted = false;
-          console.log(data);
+          this.firebaseAuthService.setUserMetadata(data);
           this.router.navigate(['/pages/dashboard']);
         });
 
@@ -71,8 +69,10 @@ export class NbLoginComponent implements OnInit{
         this.errorMessages = [this.getErrorMessage(error.code)];
         this.submitted = false;
 
-      });
-    this.cd.detectChanges();
+      }).then(() => {
+        this.cd.detectChanges();
+    });
+
   }
 
   getConfigValue(key: string): any {
@@ -93,11 +93,7 @@ export class NbLoginComponent implements OnInit{
   }
 
   ngOnInit(){
-    if(this.firebaseAuth.auth.currentUser){
-      this.router.navigate(['/pages/dashboard']);
-    }else {
-      console.log("No user Authenticated");
-    }
+    this.firebaseAuthService.validateCurrentUser();
 
   }
 

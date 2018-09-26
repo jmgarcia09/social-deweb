@@ -10,6 +10,7 @@ import { NB_AUTH_OPTIONS } from '../../auth.options';
 import { getDeepFromObject } from '../../helpers';
 import { NbAuthService } from '../../services/auth.service';
 import { NbAuthResult } from '../../services/auth-result';
+import {FirebaseAuthService} from "../../../services/firebase/auth/firebase-auth.service";
 
 @Component({
   selector: 'nb-logout',
@@ -22,7 +23,8 @@ export class NbLogoutComponent implements OnInit {
 
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},
-              protected router: Router) {
+              protected router: Router,
+              protected firebaseAuth : FirebaseAuthService) {
     this.redirectDelay = this.getConfigValue('forms.logout.redirectDelay');
     this.strategy = this.getConfigValue('forms.logout.strategy');
   }
@@ -33,7 +35,7 @@ export class NbLogoutComponent implements OnInit {
 
   logout(strategy: string): void {
     this.service.logout(strategy).subscribe((result: NbAuthResult) => {
-
+      this.firebaseAuth.logout();
       const redirect = result.getRedirect();
       if (redirect) {
         setTimeout(() => {

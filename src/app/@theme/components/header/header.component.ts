@@ -4,6 +4,9 @@ import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { UserService } from '../../../@core/data/users.service';
 import { AnalyticsService } from '../../../@core/utils/analytics.service';
 import { LayoutService } from '../../../@core/data/layout.service';
+import {FirebaseAuthService} from "../../../services/firebase/auth/firebase-auth.service";
+import {FirebaseStorage} from "angularfire2";
+import {AngularFireStorage} from "angularfire2/storage";
 
 @Component({
   selector: 'ngx-header',
@@ -14,20 +17,37 @@ export class HeaderComponent implements OnInit {
 
   @Input() position = 'normal';
 
-  user: any;
+  user: any = {
+    name : "",
+    picture : ""
+  };
+  currentUser : any;
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
+  userMenu = [{ title: 'Profile' }, { title: 'Log out', link : '../auth/logout' }];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private userService: UserService,
               private analyticsService: AnalyticsService,
-              private layoutService: LayoutService) {
+              private layoutService: LayoutService,
+              private firebaseAuth : FirebaseAuthService,
+              private firebaseStorage : AngularFireStorage) {
   }
 
-  ngOnInit() {
-    this.userService.getUsers()
-      .subscribe((users: any) => this.user = users.nick);
+  async ngOnInit() {
+    await this.firebaseAuth.validateCurrentUser();
+    this.currentUser = this.firebaseAuth.getUserMetadata();
+    console.log(this.currentUser);
+    this.user.name = this.currentUser.name;
+
+    this.firebaseStorage.ref('users/' + this.currentUser.uid).getDownloadURL().subscribe(data =>{
+      this.user.picture = data;
+      console.log(this.user);
+    });
+
+
+    // this.userService.getUsers()
+    //   .subscribe((users: any) => this.user = users.nick);
   }
 
   toggleSidebar(): boolean {

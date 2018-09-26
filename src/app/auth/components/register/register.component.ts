@@ -12,6 +12,8 @@ import { NbAuthService } from '../../services/auth.service';
 import { NbAuthResult } from '../../services/auth-result';
 import {AngularFireAuth} from "angularfire2/auth";
 import {AngularFirestore} from "angularfire2/firestore";
+import {FirebaseAuthService} from "../../../services/firebase/auth/firebase-auth.service";
+import {AngularFireStorage} from "angularfire2/storage";
 
 
 @Component({
@@ -37,8 +39,9 @@ export class NbRegisterComponent {
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
               protected router: Router,
-              protected  firebaseRegister : AngularFireAuth,
-              protected firebaseDatabase : AngularFirestore) {
+              protected  firebaseAuthService : FirebaseAuthService,
+              protected firebaseDatabase : AngularFirestore,
+              protected firebaseStorage : AngularFireStorage) {
 
     this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
     this.showMessages = this.getConfigValue('forms.register.showMessages');
@@ -50,33 +53,63 @@ export class NbRegisterComponent {
     this.errors = this.messages = [];
     this.submitted = true;
 
-    this.firebaseRegister.auth.createUserWithEmailAndPassword(this.user.email, this.user.password)
+    this.firebaseAuthService.createUser(this.user.email, this.user.password)
     .then((successResponse) => {
+
       console.log(successResponse);
       this.firebaseDatabase.collection('users').doc(successResponse.user.uid).set({
         name : this.user.fullName,
         email : successResponse.user.email,
         uid : successResponse.user.uid
       }).then(createSuccess =>{
+        this.uploadFile(this.user.avatar,successResponse.user.uid);
         alert(`Usuario registrado`);
         this.router.navigate(['/auth/login']);
       }).catch(createError =>{
         console.log("No se pudo crear usuario");
-      })
+      });
+      this.submitted = false;
 
-    }).catch(function(error) {
+    },error => {
       var errorCode = error.code;
-      var errorMessage = error.message;
-      if (errorCode == 'auth/weak-password') {
-        alert('The password is too weak.');
-      } else {
-        alert(errorMessage);
-      }
+      this.errors = [this.getErrosrMesage(errorCode)];
+      this.submitted = false;
       console.log(error);
+    }).then(() =>{
+      this.cd.detectChanges();
     });
   }
 
+  updateAvatar(event){
+    this.user.avatar = event;
+    console.log(this.user.avatar);
+  }
+
+  uploadFile(event,name: string) {
+    const file = event.target.files[0];
+    const filePath = 'users/' + name;
+    this.firebaseStorage.upload(filePath,file);
+
+  }
+
+
+
   getConfigValue(key: string): any {
     return getDeepFromObject(this.options, key, null);
+  }
+
+
+  getErrosrMesage(code : string) : string{
+    if("auth/email-already-in-use" === code){
+      return "Usuario ya se encuentra en uso. Utiliza otro correo";
+    }else if("auth/invalid-email" === code){
+      return "Correo invalido.";
+    }else if ("auth/operation-not-allowed\n" === code){
+      return "Operacion no permitida.";
+    }else if ("auth/weak-password" === code){
+      return "Contrasenia muy vulnerable.";
+    }else{
+      return "Error inesperado.";
+    }
   }
 }
