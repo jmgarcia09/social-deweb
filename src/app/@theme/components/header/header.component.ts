@@ -38,13 +38,10 @@ export class HeaderComponent implements OnInit {
     await this.firebaseAuth.validateCurrentUser();
     this.currentUser = this.firebaseAuth.getUserMetadata();
     console.log(this.currentUser);
-    this.user.name = this.currentUser.name;
-
-    this.firebaseStorage.ref('users/' + this.currentUser.uid).getDownloadURL().subscribe(data =>{
-      this.user.picture = data;
-      console.log(this.user);
-    });
-
+    if(this.currentUser){
+      this.user.name = this.currentUser.name;
+      this.user.picture = this.currentUser.image;
+    }
 
     // this.userService.getUsers()
     //   .subscribe((users: any) => this.user = users.nick);

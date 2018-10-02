@@ -7,6 +7,8 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PostsComponent } from './posts/posts.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import {ModalComponent} from "./ui-features/modals/modal/modal.component";
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -23,7 +25,12 @@ const PAGES_COMPONENTS = [
   declarations: [
     ...PAGES_COMPONENTS,
     PostsComponent,
+    UserProfileComponent,
+    ModalComponent
   ],
+  entryComponents: [
+    ModalComponent
+  ]
 })
 export class PagesModule {
 }

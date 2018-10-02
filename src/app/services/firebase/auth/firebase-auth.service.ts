@@ -18,9 +18,9 @@ export class FirebaseAuthService {
 
 
   validateCurrentUser(){
-    if(this.firebaseAuth.auth.currentUser){
+    if(this.firebaseAuth.auth.currentUser && this.getUserMetadata()){
       console.log("User " + this.getUserMetadata());
-      this.router.navigate(['/pages/dashboard']);
+      this.router.navigate(['/pages/user-profile']);
     }else {
       console.log("No user Authenticated");
       this.router.navigate(['/auth']);

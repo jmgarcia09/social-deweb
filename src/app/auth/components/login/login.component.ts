@@ -13,6 +13,7 @@ import {AngularFireAuth} from "angularfire2/auth";
 import {AngularFirestore} from "angularfire2/firestore";
 import {SocialUser} from "../../../bean/social-user";
 import {FirebaseAuthService} from "../../../services/firebase/auth/firebase-auth.service";
+import {AngularFireStorage} from "angularfire2/storage";
 
 @Component({
   selector: 'nb-login',
@@ -38,7 +39,8 @@ export class NbLoginComponent implements OnInit{
               protected router: Router,
               protected  firebaseAuth : AngularFireAuth,
               protected  firebaseDatabase : AngularFirestore,
-              protected  firebaseAuthService : FirebaseAuthService) {
+              protected  firebaseAuthService : FirebaseAuthService,
+              private firebaseStorage : AngularFireStorage) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
     this.showMessages = this.getConfigValue('forms.login.showMessages');
@@ -59,8 +61,12 @@ export class NbLoginComponent implements OnInit{
         this.firebaseDatabase.doc(userPath).valueChanges().subscribe(data =>{
         //this.firebaseDatabase.collection('users', ref => ref.where('email','==',successResponse.user.email).limit(1)).valueChanges().subscribe(data =>{
           this.submitted = false;
-          this.firebaseAuthService.setUserMetadata(data);
-          this.router.navigate(['/pages/dashboard']);
+           this.firebaseStorage.ref(userPath).getDownloadURL().subscribe(imageUrl =>{
+             data.image = imageUrl;
+            this.firebaseAuthService.setUserMetadata(data);
+            this.router.navigate(['/pages/user-profile']);
+           });
+
         });
 
       },
