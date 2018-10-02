@@ -58,7 +58,7 @@ export class NbLoginComponent implements OnInit{
         this.messages.push("Autenticacion correcta!.");
 
         let userPath = 'users/' + successResponse.user.uid;
-        this.firebaseDatabase.doc(userPath).valueChanges().subscribe(data =>{
+        this.firebaseDatabase.doc(userPath).valueChanges().subscribe((data:any) =>{
         //this.firebaseDatabase.collection('users', ref => ref.where('email','==',successResponse.user.email).limit(1)).valueChanges().subscribe(data =>{
           this.submitted = false;
            this.firebaseStorage.ref(userPath).getDownloadURL().subscribe(imageUrl =>{
