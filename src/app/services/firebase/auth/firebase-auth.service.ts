@@ -9,6 +9,10 @@ import {AngularFirestore} from "angularfire2/firestore";
 export class FirebaseAuthService {
 
   metadata : any;
+  userHeader: any ={
+    name : "",
+    picture : ""
+  };
 
   constructor(protected router: Router,
               protected  firebaseAuth : AngularFireAuth,
@@ -33,11 +37,17 @@ export class FirebaseAuthService {
 
   setUserMetadata(data : any){
     this.metadata = data;
+    this.userHeader.picture = data.image;
+    this.userHeader.name = data.name;
 
   }
 
   getUserMetadata(){
     return this.metadata;
+  }
+
+  getUserHeader(){
+    return this.userHeader;
   }
 
   login(user: string, password: string){

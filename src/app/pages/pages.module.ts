@@ -9,6 +9,8 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { PostsComponent } from './posts/posts.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import {ModalComponent} from "./ui-features/modals/modal/modal.component";
+import { UserUpdateComponent } from './user-update/user-update.component';
+import {NbCalendarComponent, NbCalendarModule} from "@nebular/theme";
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -21,15 +23,18 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
+    NbCalendarModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,
     PostsComponent,
     UserProfileComponent,
-    ModalComponent
+    ModalComponent,
+    UserUpdateComponent
   ],
   entryComponents: [
-    ModalComponent
+    ModalComponent,
+    UserUpdateComponent
   ]
 })
 export class PagesModule {

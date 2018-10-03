@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
   };
   currentUser : any;
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out', link : '../auth/logout' }];
+  userMenu = [{ title: 'Profile', link : '../#/pages/user-profile' }, { title: 'Log out', link : '../auth/logout' }];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -39,8 +39,7 @@ export class HeaderComponent implements OnInit {
     this.currentUser = this.firebaseAuth.getUserMetadata();
     console.log(this.currentUser);
     if(this.currentUser){
-      this.user.name = this.currentUser.name;
-      this.user.picture = this.currentUser.image;
+      this.user = this.firebaseAuth.getUserHeader();
     }
 
     // this.userService.getUsers()

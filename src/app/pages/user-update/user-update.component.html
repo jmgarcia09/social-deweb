@@ -1,0 +1,62 @@
+
+<div class="modal-header">
+  <span>Actualizar Perfil</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <nb-card accent="danger">
+    <nb-card-header>Datos</nb-card-header>
+    <nb-card-body>
+      <div class="form-group row">
+        <label for="email" class="col-sm-3 col-form-label">Correo*</label>
+        <div class="col-sm-9">
+          <input type="text" shape="round"  disabled="disabled" class="form-control" id="email" pattern=".+@.+..+" value="{{user.email}}" placeholder="Correo">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="name" class="col-sm-3 col-form-label">Nombre</label>
+        <div class="col-sm-9">
+          <input type="text" shape="round"  [(ngModel)]="user.name"  class="form-control" id="name" value="{{user.name}}" placeholder="Nombre de Usuario">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="genre" class="col-sm-3 col-form-label">Genero</label>
+        <div class="col-sm-9">
+          <input type="text"  shape="round" [(ngModel)]="user.genre"  class="form-control" id="genre" value="{{user.genre}}" placeholder="Genero">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="about" class="col-sm-3 col-form-label">Acerca de ti</label>
+        <div class="col-sm-9">
+          <textarea class="form-control" [(ngModel)]="user.about" shape="round"  id="about" placeholder="Acerca de ti" value="{{user.about}}"></textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="birthdate" class="col-sm-3 col-form-label">Fecha de Nacimiento</label>
+        <div class="col-sm-9">
+          <nb-calendar id="birthdate" [date]="date" (dateChange)="handleDateChange($event)"></nb-calendar>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="avatar" class="col-sm-3 col-form-label">Actualizar Foto</label>
+        <div class="col-sm-9">
+          <input nbInput
+                 type="file"
+                 id="avatar"
+                 name="avatar"
+                 placeholder="Subir imagen"
+                 fullWidth
+                 (change)="updateAvatar($event)">
+        </div>
+      </div>
+
+    </nb-card-body>
+  </nb-card>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-md btn-hero-primary" (click)="updateProfile()">Guardar Cambios</button>
+  <button class="btn btn-md btn-hero-warning" (click)="closeModal()">Cancelar</button>
+</div>
