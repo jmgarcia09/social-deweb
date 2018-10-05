@@ -50,7 +50,8 @@ export class NbLoginComponent implements OnInit{
   }
 
   login(): void {
-    this.errorMessages = this.messages = [];
+    this.errorMessages = [];
+    this.messages = [];
     this.submitted = true;
     this.firebaseAuthService.login(this.user.email,this.user.password).then(
       (successResponse : any) => {

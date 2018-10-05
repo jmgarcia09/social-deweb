@@ -25,7 +25,15 @@
       <div class="form-group row">
         <label for="genre" class="col-sm-3 col-form-label">Genero</label>
         <div class="col-sm-9">
-          <input type="text"  shape="round" [(ngModel)]="user.genre"  class="form-control" id="genre" value="{{user.genre}}" placeholder="Genero">
+          <div [(ngModel)]="user.genre" ngbRadioGroup id="genre"
+               class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+            <label ngbButtonLabel class="btn btn-outline-primary">
+              <input ngbButton type="radio" value="Masculino"> Masculino
+            </label>
+            <label ngbButtonLabel class="btn btn-outline-primary">
+              <input ngbButton type="radio" value="Femenino"> Femenino
+            </label>
+          </div>
         </div>
       </div>
       <div class="form-group row">

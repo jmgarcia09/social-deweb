@@ -63,6 +63,11 @@ export class NbRegisterComponent {
         uid : successResponse.user.uid
       }).then(createSuccess =>{
         this.uploadFile(this.user.avatar,successResponse.user.uid);
+        let userPath = 'users/' + successResponse.user.uid;
+        this.firebaseStorage.ref(userPath).getDownloadURL().subscribe(imageUrl =>{
+          this.firebaseDatabase.collection('users').doc(successResponse.user.uid).update({
+            image : imageUrl});
+        });
         alert(`Usuario registrado`);
         this.router.navigate(['/auth/login']);
       }).catch(createError =>{

@@ -1,3 +1,29 @@
-<p>
-  posts works!
-</p>
+<nb-card accent="info">
+  <nb-card-header>
+    <h4 class="col-md-4">Publicaciones</h4>
+
+    <button class="btn btn-hero-primary col-md-4 offset-md-4" (click)="showProfileModal()" >Publicar</button>
+  </nb-card-header>
+  <nb-card-body >
+    <nb-layout>
+      <nb-layout-header>
+        <h4 >Ultimas publicaciones</h4>
+
+      </nb-layout-header>
+      <nb-layout-column *ngIf="posts">
+
+        <nb-card accent="success" *ngFor="let post of posts | async" >
+          <nb-card-header>
+            <nb-user name="{{getUserData(post.userId).name}}" picture="{{getUserData(post.userId).image}}" ></nb-user>
+          </nb-card-header>
+          <nb-card-body>
+            <p class="col-md-12">{{post.description}}</p>
+            <img *ngIf="post.fileUrl" src="{{post.fileUrl}}" class="img-responsive">
+          </nb-card-body>
+        </nb-card>
+
+
+      </nb-layout-column>
+    </nb-layout>
+  </nb-card-body>
+</nb-card>

@@ -22,6 +22,7 @@ import {NbAuthModule} from "./auth/auth.module";
 import {NbDummyAuthStrategy} from "./auth/strategies";
 import {AngularFirestoreModule} from "angularfire2/firestore";
 import {AngularFireStorageModule} from "angularfire2/storage";
+import {NbListModule} from "@nebular/theme";
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,6 @@ import {AngularFireStorageModule} from "angularfire2/storage";
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),

@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {UserProfileComponent} from "./user-profile/user-profile.component";
+import {PostsComponent} from "./posts/posts.component";
 
 const routes: Routes = [{
   path: '',
@@ -13,6 +14,9 @@ const routes: Routes = [{
   children: [{
     path: 'user-profile',
     component: UserProfileComponent,
+  },{
+    path: 'posts',
+    component: PostsComponent,
   },{
     path: 'dashboard',
     component: ECommerceComponent,
@@ -45,7 +49,7 @@ const routes: Routes = [{
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'user-profile',
     pathMatch: 'full',
   }, {
     path: '**',
