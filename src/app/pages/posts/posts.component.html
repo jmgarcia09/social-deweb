@@ -12,9 +12,11 @@
       </nb-layout-header>
       <nb-layout-column *ngIf="posts">
 
-        <nb-card accent="success" *ngFor="let post of posts | async" >
+        <nb-card accent="success" *ngFor="let post of posts | async" size="small">
           <nb-card-header>
-            <nb-user name="{{getUserData(post.userId).name}}" picture="{{getUserData(post.userId).image}}" ></nb-user>
+            <nb-user size="small" class="col-md-4" name="{{getUserData(post.userId).name}}" picture="{{getUserData(post.userId).image}}" ></nb-user>
+            <br>
+            <p class="col-md-4 ">Fecha de publicacion: {{post.date | date : 'yyyy/MM/dd h:mm a'}}</p>
           </nb-card-header>
           <nb-card-body>
             <p class="col-md-12">{{post.description}}</p>

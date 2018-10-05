@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <span>Publicar</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <nb-card accent="danger">
+    <nb-card-header>Datos</nb-card-header>
+    <nb-card-body>
+      <div class="form-group row">
+        <label for="description" class="col-sm-3 col-form-label">Que piensas?</label>
+        <div class="col-sm-9">
+          <textarea class="form-control" [(ngModel)]="post.description" shape="round"  id="description" placeholder="Acerca de ti" value="{{post.description}}"></textarea>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="image" class="col-sm-3 col-form-label">Sube una foto</label>
+        <div class="col-sm-9">
+          <input nbInput
+                 type="file"
+                 id="image"
+                 name="image"
+                 placeholder="Subir imagen"
+                 fullWidth
+                 (change)="updateImage($event)">
+        </div>
+      </div>
+
+    </nb-card-body>
+  </nb-card>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-md btn-hero-primary" (click)="publishPost()">Publicar</button>
+  <button class="btn btn-md btn-hero-warning" (click)="closeModal()">Cancelar</button>
+</div>
