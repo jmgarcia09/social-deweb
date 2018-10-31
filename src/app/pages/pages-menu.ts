@@ -15,7 +15,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Blog',
     icon: 'nb-list',
     link: '/pages/posts'
+  },{
+    title: 'Acerca',
+    icon: 'nb-flame-circled',
+    link: '/pages/about'
   },
+
   {
     title: 'IoT Dashboard',
     icon: 'nb-home',

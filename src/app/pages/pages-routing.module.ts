@@ -7,6 +7,7 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {PostsComponent} from "./posts/posts.component";
+import {AboutComponent} from "./about/about.component";
 
 const routes: Routes = [{
   path: '',
@@ -23,6 +24,9 @@ const routes: Routes = [{
   }, {
     path: 'iot-dashboard',
     component: DashboardComponent,
+  },{
+    path: 'about',
+    component: AboutComponent,
   }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',

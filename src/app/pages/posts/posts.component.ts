@@ -16,7 +16,7 @@ import OrderByDirection = firebase.firestore.OrderByDirection;
 })
 export class PostsComponent implements OnInit {
 
-  posts : Observable<Post[]>;
+  posts : Observable<any[]>;
   userMetadata : any;
 
   constructor(private firebaseAuthService : FirebaseAuthService,

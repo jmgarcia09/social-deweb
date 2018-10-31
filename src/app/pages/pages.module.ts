@@ -12,6 +12,7 @@ import {ModalComponent} from "./ui-features/modals/modal/modal.component";
 import { UserUpdateComponent } from './user-update/user-update.component';
 import {NbCalendarComponent, NbCalendarModule, NbListComponent, NbListItemComponent} from "@nebular/theme";
 import { PublishPostComponent } from './publish-post/publish-post.component';
+import {AboutComponent} from "./about/about.component";
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -32,7 +33,8 @@ const PAGES_COMPONENTS = [
     UserProfileComponent,
     ModalComponent,
     UserUpdateComponent,
-    PublishPostComponent
+    PublishPostComponent,
+    AboutComponent
   ],
   entryComponents: [
     ModalComponent,
