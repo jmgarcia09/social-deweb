@@ -13,6 +13,9 @@ import { UserUpdateComponent } from './user-update/user-update.component';
 import {NbCalendarComponent, NbCalendarModule, NbListComponent, NbListItemComponent} from "@nebular/theme";
 import { PublishPostComponent } from './publish-post/publish-post.component';
 import {AboutComponent} from "./about/about.component";
+import { UserSearchComponent } from './user-search/user-search.component';
+import {NbLogoutComponent} from "../auth/components";
+import {NbAuthModule} from "../auth";
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -25,7 +28,8 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
-    NbCalendarModule
+    NbCalendarModule,
+    NbAuthModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,
@@ -34,7 +38,8 @@ const PAGES_COMPONENTS = [
     ModalComponent,
     UserUpdateComponent,
     PublishPostComponent,
-    AboutComponent
+    AboutComponent,
+    UserSearchComponent
   ],
   entryComponents: [
     ModalComponent,

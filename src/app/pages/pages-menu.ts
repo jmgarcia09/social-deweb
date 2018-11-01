@@ -15,16 +15,26 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Blog',
     icon: 'nb-list',
     link: '/pages/posts'
-  },{
+  },
+  {
+    title: 'Buscar',
+    icon: 'nb-search',
+    link: '/pages/user-search',
+  },
+  {
+    title: 'Dashboard',
+    icon: 'nb-bar-chart',
+    link: '/pages/charts/echarts',
+  },
+  {
     title: 'Acerca',
     icon: 'nb-flame-circled',
     link: '/pages/about'
   },
-
   {
-    title: 'IoT Dashboard',
-    icon: 'nb-home',
-    link: '/pages/iot-dashboard',
+    title: 'Cerrar Sesion',
+    icon: 'nb-close',
+    link: '/auth/logout',
   },
 
 ];

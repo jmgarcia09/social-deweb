@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Usuarios mas activos</nb-card-header>
+      <nb-card-body>
+        <div class="col-md-12" *ngFor="let user of activeUsers">
+          <nb-user size="small" class="col-md-4" name="{{user.name}}" picture="{{user.image}}" ></nb-user>
+          <hr>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-12">
+    <nb-card>
+      <nb-card-header>Busqueda de usuarios</nb-card-header>
+      <nb-card-body>
+        <div class="form-group row">
+          <div class="col-md-8">
+            <input type="text" [(ngModel)]="searchIndex"  class="form-control" id="name" placeholder="Ingresa lo que deseas buscar.">
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-hero-success" (click)="searchUsers()">Realizar Busqueda</button>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group row" *ngIf="foundUsers.length >= 1">
+          <h3>Usuarios encontrados: </h3>
+          <div class="col-md-12" *ngFor="let user of foundUsers">
+            <nb-user size="small" class="col-md-4" name="{{user.name}}" picture="{{user.image}}" ></nb-user>
+            <hr>
+          </div>
+        </div>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

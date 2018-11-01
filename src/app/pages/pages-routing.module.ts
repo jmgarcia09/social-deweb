@@ -8,6 +8,8 @@ import { NotFoundComponent } from './miscellaneous/not-found/not-found.component
 import {UserProfileComponent} from "./user-profile/user-profile.component";
 import {PostsComponent} from "./posts/posts.component";
 import {AboutComponent} from "./about/about.component";
+import {UserSearchComponent} from "./user-search/user-search.component";
+import {NbLogoutComponent} from "../auth/components";
 
 const routes: Routes = [{
   path: '',
@@ -27,6 +29,12 @@ const routes: Routes = [{
   },{
     path: 'about',
     component: AboutComponent,
+  },{
+    path: 'user-search',
+    component: UserSearchComponent,
+  },{
+    path: 'logout',
+    component: NbLogoutComponent,
   }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',
